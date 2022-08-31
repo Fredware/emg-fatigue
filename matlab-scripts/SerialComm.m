@@ -32,6 +32,7 @@ classdef SerialComm < handle
                 init(obj);
             end
         end
+        
         function init(obj,varargin)
             if nargin>1
                 COMPort=varargin{1};
@@ -59,11 +60,13 @@ classdef SerialComm < handle
             pause(0.1);
             obj.Ready = true;
         end
+        
         function close(obj,varargin)
             if isobject(obj.ARD)
                 delete(obj.ARD);
             end
         end
+        
         function read(obj,varargin)
             try
                 % read data & update status
@@ -79,8 +82,9 @@ classdef SerialComm < handle
                 disp('Serial communication error!')
             end
         end
+        
         function EMG = getEMG(obj,varargin)
-            EMG=obj.DataBuffer/1024*5-2.5;
+            EMG = obj.DataBuffer/1024*5-2.5;
         end
         
         function EMG = getRecentEMG(obj,varargin)
