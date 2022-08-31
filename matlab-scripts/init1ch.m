@@ -1,4 +1,4 @@
-function [data,control, dataindex, controlindex, prevSamp,previousTimeStamp]=init1ch()
+function [data, control, dataindex, controlindex, prevSamp, previousTimeStamp]=init1ch()
 % this function initializes all the variables needed to store the data
 % input from the Arduino, and to alter it to control the virtual hand. 
 % data is a vector of arbitrarily large size to store the incoming EMG data
@@ -16,9 +16,9 @@ function [data,control, dataindex, controlindex, prevSamp,previousTimeStamp]=ini
 % each time graphs are updated
 % previousTimeStamp is used to limit the rate of control if a delay is
 % used. 
-nSamp = 1000000; %abritrarily large buffer for data
-data = NaN(1,nSamp);
-control = NaN(1,nSamp);
+BUFFER_SIZE = 1000000; %abritrarily large buffer for data
+data = NaN(1, BUFFER_SIZE);
+control = NaN(1, BUFFER_SIZE);
 dataindex = 1;
 controlindex = 0;
 prevSamp = 1;
