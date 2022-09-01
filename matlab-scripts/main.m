@@ -47,15 +47,13 @@ while( ishandle(fig)) %run until time is out or figure closes
         % CALCULATE CONTROL VALUES
         try
             %% start of your code
-            control( 1, control_idx) = mean( abs( data(1, data_idx-100:data_idx-1)));
-%             f_median = medfreq(data(dataindex-100:dataindex-1), 1); %Fs=1kHz
-%             if (isnan(f_median))
-%                 disp('Something broke the thing');
-%                 control(1,controlindex) = -0.5;
-%             else 
-%                 control(1,controlindex) = f_median;
-%                 disp('The thing works');
-%             end 
+            [emg_feat, mav_feat, mdf_feat, mnf_feat, rms_feat] = uno.get_feats;
+            
+%             control( 1, control_idx) = mav_feat;
+%             control( 1, control_idx) = mdf_feat;
+            control( 1, control_idx) = mnf_feat;
+%             control( 1, control_idx) = rms_feat;
+            
             %% end of your code
             
         catch

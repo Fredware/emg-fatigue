@@ -7,8 +7,12 @@ subplot(211)
 plot(tdata,data(~isnan(data)))
 ylabel('V')
 xlabel('Time (s)')
-subplot(212)
+ylim([-3.0, 3.0]);
+yticks(-2.5:0.5:2.5)
 
+grid on
+
+subplot(212)
 plot(tcontrol,control(~isnan(control)))
 ylabel('C')
 xlabel('Time (s)')
