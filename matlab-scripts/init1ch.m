@@ -1,4 +1,4 @@
-function [data, control, data_idx, control_idx, prev_samp, prev_timestamp]=init1ch()
+function [data, features, data_idx, features_idx, prev_sample, prev_timestamp] = init1ch()
 % this function initializes all the variables needed to store the data
 % input from the Arduino, and to alter it to control the virtual hand. 
 % 
@@ -24,9 +24,9 @@ function [data, control, data_idx, control_idx, prev_samp, prev_timestamp]=init1
 % used. 
 BUFFER_SIZE = 1000000; %abritrarily large buffer for data
 data = NaN(1, BUFFER_SIZE);
-control = NaN(4, BUFFER_SIZE);
+features = NaN(4, BUFFER_SIZE);
 data_idx = 1;
-control_idx = 0;
-prev_samp = 1;
+features_idx = 0;
+prev_sample = 1;
 prev_timestamp = 0;
 end

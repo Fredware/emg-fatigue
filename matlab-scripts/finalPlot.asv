@@ -23,13 +23,10 @@ for i = 1:n_chans
     fig_idx = fig_idx + 1;
 end
 
-nan_features = features(:, 1:length(t_features));
-
 for i = 1:n_features
     subplot( fig_rows, fig_cols, fig_idx)
-    plot(t_features, nan_features(i,:))
-    ylabel(strcat('Feature ', num2str(i)))
+    plot(t_features, features(~isnan(features)))
+    ylabel('C')
     xlabel('Time (s)')
-    fig_idx = fig_idx + 1;
 end
 end

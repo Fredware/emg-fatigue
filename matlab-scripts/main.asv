@@ -56,7 +56,7 @@ while( ishandle(fig))
 
         t_features(features_idx)=timestamp;
         tempStart = t_data(end);
-        t_data( prev_sample:data_idx-1) = linspace( tempStart, timestamp, new_samples);
+        t_data( prev_sample:data_idx-1) = linspace(tempStart,timestamp,new_samples);
         
         % UPDATE PLOT
         [t_max, t_min] = updatePlot1ch(animated_lines, timestamp, data, features, prev_sample, data_idx, features_idx, t_max, t_min);

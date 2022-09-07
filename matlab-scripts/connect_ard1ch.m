@@ -1,4 +1,4 @@
-function [uno, ArduinoConnected]=connect_ard1ch(varargin)
+function [board, connected] = connect_ard1ch(varargin)
 % This function sets up the communication between matlab and the arduino,
 % for one EMG channel input.
 % uno is a serial communication MATLAB object that is used to get the data
@@ -8,15 +8,15 @@ function [uno, ArduinoConnected]=connect_ard1ch(varargin)
 try
     % SET UP ARDUINO COMMUNICATION
     if nargin
-        uno=SerialComm(varargin{1});
+        board = SerialComm(varargin{1});
     else
-        uno = SerialComm(); %setup connection to arduino
+        board = SerialComm(); %setup connection to arduino
     end
-    ArduinoConnected = 1;
-    disp('Arduino connected! :)')
+    connected = 1;
+    disp('Board connection: SUCCEEDED')
 catch
-    uno = NaN;
-    ArduinoConnected = 0;
-    disp('Arduino failed to connect. :(')
+    board = NaN;
+    connected = 0;
+    disp('Board connection: FAILED')
 end
 end

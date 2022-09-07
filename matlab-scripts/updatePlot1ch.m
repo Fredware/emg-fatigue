@@ -35,5 +35,5 @@ function [Tmax, Tmin] = updatePlot1ch(animatedLines, timeStamp, data, control, p
         Tmin=Tmin+5;
         xlim([Tmin Tmax])
     end
-    drawnow limitrate %update the plot, but limit update rate to 20 Hz
+    drawnow limitrate %update the plot, but limit update rate to 20 fps
 end
