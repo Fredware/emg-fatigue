@@ -3,17 +3,19 @@ try
     uno.close;
 catch
 end
-clear all; clc;
+clear all; 
+clc;
+
 %% Section 1: Set Up Virtual Environment (MuJoCo)
 % You should have MuJoCo open with a model loaded and running before
 % starting this code!  If your code is crashing during this section, try
 % the following: Close MuJoCo, Open MuJoCo, Open Model, Play MuJoCo, Run
 % MATLAB Code.
 
-[model_info, movements,command, selectedDigits_Set1, selectedDigits_Set2, VREconnected] = connect_hand;
+[model_info, movements, command, selectedDigits_Set1, selectedDigits_Set2, VREconnected] = connect_hand;
 
 %% connect to arduino
-[uno, ArduinoConnected]=connect_ard1ch();% can put the comport number in as an argument to bypass automatic connection, useful if more than one arduino uno is connected
+[uno, ArduinoConnected] = connect_ard1ch();% can put the comport number in as an argument to bypass automatic connection, useful if more than one arduino uno is connected
 
 %% Plot (and control) in real time
 
@@ -77,4 +79,6 @@ end
 finalPlot(data,control,t_data,t_control)
 
 %% close the arduino serial connection before closing MATLAB
-uno.close; 
+uno.close;
+%% save data to file
+raw_data = data(1:data_idx-1);

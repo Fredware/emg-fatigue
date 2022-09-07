@@ -1,4 +1,4 @@
-function [fig_handle, line_handles, t_max, t_min] = plotSetup1ch()
+function [figHandle, line_handles, t_max, t_min] = plotSetup1ch()
     %
     % PLOTSETUP1CH  sets up plots to visualize EMG input and the control
     % value calculated later in EMG_live. 
@@ -28,28 +28,28 @@ function [fig_handle, line_handles, t_max, t_min] = plotSetup1ch()
     axis_handles=cell( 1, n_plots);
     line_handles=cell( 1, n_plots);
     
-    for i = 1:n_chans
-        y_labels{i} = strcat('v', num2str(i), ' (V)');
-        y_labels{i + n_chans} = strcat('c', num2str(i));
+    for i=1:n_chans
+        y_labels{i}=strcat('v',num2str(i),' (V)');
+        y_labels{i+n_chans}=strcat('c',num2str(i));
     end
     
-    fig_handle = figure('units', 'normalized'); %open figure
-    set( fig_handle, 'outerposition', [0, 0, 0.5, 1])%moveFigure to left half of screen
+    figHandle=figure('units','normalized'); %open figure
+    set(figHandle,'outerposition',[0,0,.5,1])%moveFigure to left half of screen
     
-    for i = 1:n_plots
-        axis_handles{i} = subplot(n_plots, 1, i);
-        line_handles{i} = animatedline;
+    for i=1:n_plots
+        axis_handles{i}=subplot(n_plots,1,i);
+        line_handles{i}=animatedline;
 %         ylim([-1.2,1.2])
         xlim([0 t_max])
         ylabel(y_labels{i})
         xticks([]);
-%         if i > n_chans
-%             ylim([-0.25,1.25]);
-%             yticks([0,1]);
-%             yticklabels({'OPEN','CLOSE'})
-%         else
-%             ylim([-3.0, 3.0]);
-%         end
+        if i>n_chans
+            ylim([-0.25,1.25]);
+            yticks([0,1]);
+            yticklabels({'OPEN','CLOSE'})
+        else
+            ylim([-3.0, 3.0]);
+        end
         
     end
     linkaxes([axis_handles{:}],'x')
