@@ -1,10 +1,13 @@
 function [Tmax, Tmin] = updatePlot1ch(animatedLines, timeStamp, data, control, prevSamp, dataindex, controlindex, Tmax, Tmin)
 % [Tmax, Tmin] = updatePlot1ch(animatedLines, timeStamp, data, control, prevSamp, dataindex, controlindex, Tmax, Tmin)
+
 % updatePlot1ch updates the plots for the EMG data and control
 % animatedLines are handles for the animated lines returned from
 % plotSetup(1ch).m. 
+
 % timeStamp is the current time value and is used as the independent (x)
 % variable in the graphs
+
 % data is the whole data vector/matrix and is plotted with the max and min
 % values between the previous sample and the current dataindex. 
 % control is the whole control vector/matrix and is plotted at timeStamp
@@ -19,12 +22,12 @@ function [Tmax, Tmin] = updatePlot1ch(animatedLines, timeStamp, data, control, p
 % keep running continuously if desired.
 % Tmin is the lower xlimit of the graphs. updated similarly to Tmax as
 % timeStamp increases passed Tmax
-    for i=1:length(animatedLines)
-        if i<=1
-            addpoints(animatedLines{i},timeStamp,max(data(i,prevSamp:dataindex-1)));
-            addpoints(animatedLines{i},timeStamp,min(data(i,prevSamp:dataindex-1)));
+    for i = 1:length(animatedLines)
+        if i <= 1
+            addpoints(animatedLines{i}, timeStamp, max( data(i, prevSamp:dataindex-1)));
+            addpoints(animatedLines{i}, timeStamp, min( data(i, prevSamp:dataindex-1)));
         else
-            addpoints(animatedLines{i},timeStamp,control(i-1,controlindex));
+            addpoints(animatedLines{i}, timeStamp, control(i-1,controlindex));
         end
     end
     if timeStamp>Tmax

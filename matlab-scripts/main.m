@@ -51,10 +51,10 @@ while( ishandle(fig)) %run until time is out or figure closes
             %% start of your code
             [emg_feat, mav_feat, mdf_feat, mnf_feat, rms_feat] = uno.get_feats;
             
-%             control( 1, control_idx) = mav_feat;
-%             control( 1, control_idx) = mdf_feat;
-            control( 1, control_idx) = mnf_feat;
-%             control( 1, control_idx) = rms_feat;
+            control( 1, control_idx) = mav_feat;
+            control( 2, control_idx) = rms_feat;
+            control( 3, control_idx) = mdf_feat;
+            control( 4, control_idx) = mnf_feat;
             
             %% end of your code
             

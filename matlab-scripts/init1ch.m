@@ -24,7 +24,7 @@ function [data, control, data_idx, control_idx, prev_samp, prev_timestamp]=init1
 % used. 
 BUFFER_SIZE = 1000000; %abritrarily large buffer for data
 data = NaN(1, BUFFER_SIZE);
-control = NaN(1, BUFFER_SIZE);
+control = NaN(4, BUFFER_SIZE);
 data_idx = 1;
 control_idx = 0;
 prev_samp = 1;

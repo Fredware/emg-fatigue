@@ -19,7 +19,7 @@ function [fig_handle, line_handles, t_max, t_min] = plotSetup1ch()
     % both Tmax and Tmin are dynamically updated in updatePlot1ch.m
     
     n_chans = 1; %number of input channels 
-    n_dofs = n_chans; %number of degrees of freedom controlled
+    n_dofs = 4; %number of degrees of freedom controlled
     n_plots = n_chans + n_dofs;
     t_max = 30;
     t_min = 0;
