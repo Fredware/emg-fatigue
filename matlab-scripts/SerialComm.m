@@ -25,7 +25,7 @@ classdef SerialComm < handle
             % Define the structure of your buffer
             % 2 channels * 500 samples @ 1 000 Hz = 500 ms of data
             n_chans = 2;
-            n_samples = 500;
+            n_samples = 300;
             
             obj.DataBuffer = zeros(n_chans, n_samples);
             
@@ -109,7 +109,7 @@ classdef SerialComm < handle
             rms_feat = rms( temp);
         end
         
-        function EMG = getRecentEMG(obj,varargin)
+        function [EMG, varargout] = getRecentEMG(obj,varargin)
             lastIdx = length(obj.DataBuffer);
             startIdx = lastIdx-obj.Count;
             if startIdx<1
@@ -122,6 +122,8 @@ classdef SerialComm < handle
             %   shift introduced by BYB  
             EMG = obj.DataBuffer(:,startIdx:end)/1024*5-2.5;
             obj.Count=0;
+            varargout{1} = obj.Status.CurrTime;
+            varargout{2} = length(EMG) / (obj.Status.CurrTime - obj.Status.LastTime);
         end
     end    
 end %class
