@@ -3,18 +3,16 @@ try
     uno.close;
 catch
 end
-clear all; 
+clear main; 
 clc;
 
 %% Establish connection with Arduino
-% Pass comport number as argument to bypass automatic connection. 
-% Useful if more than one board is connected.
-[uno, uno_connected] = connect_ard1ch();
+% Pass COM port number as argument to bypass automatic connection.
+[uno, uno_connected] = connect_board();
 
-%% Plot in real time
-
+%% Plotting in real time
 % SET UP PLOT
-[fig, animated_lines, t_max, t_min] = plotSetup1ch();
+[fig, animated_lines, t_max, t_min] = plotSetup1ch(n_chans = 1, n_feats=5);
 
 % INITIALIZATION
 [data, features, data_idx, features_idx, prev_sample, prev_timestamp] = init1ch();

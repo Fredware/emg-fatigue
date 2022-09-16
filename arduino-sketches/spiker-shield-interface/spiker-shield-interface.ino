@@ -1,6 +1,6 @@
 #define SAMPLING_PERIOD 1000 // microseconds = 1kHz sampling freq
 
-int musclePin[] = {A2, A1};   // Arduino input locations (A2 and A1 are the inputs for the EMG shield)
+int musclePin[] = {A1};   // Arduino input locations (A2 and A1 are the inputs for the EMG shield)
 
 char print_buff[10];    // allocate space for reading voltages
 
@@ -14,8 +14,11 @@ void loop()
 {
   long start_time = micros();  //start timer
   
-  sprintf( print_buff,"%d %d",          // read voltages
-           analogRead( musclePin[1]), 
+  // read voltages
+  // string must match in matlab code
+  // use one %d per channel separated by a space
+  sprintf( print_buff,
+           "%d",           
            analogRead( musclePin[0])
   );
 

@@ -99,7 +99,7 @@ classdef SerialComm < handle
                 obj.Data_Buffer = circshift( obj.Data_Buffer, -1, 2);
                 obj.Data_Buffer( :, end) = obj.Status.Data;
                 
-                obj.Count = obj.Count + 1;
+                obj.Count = obj.Count+1;
             catch
                 disp('Serial communication error!')
             end
@@ -119,10 +119,10 @@ classdef SerialComm < handle
             if startIdx < 1
                 startIdx = 1;
             end  
-            EMG = obj.Data_Buffer( :, startIdx:end)/1024*5 - 2.5;
-            obj.Count = 0;
+            EMG = obj.Data_Buffer( :, startIdx:end) / 1024 * 5 -2.5;
+            obj.Count=0;
             varargout{1} = obj.Status.CurrTime;
-            varargout{2} = length(EMG) / ( obj.Status.CurrTime - obj.Status.LastTime);
+            varargout{2} = length(EMG) / (obj.Status.CurrTime - obj.Status.LastTime);
         end
     end    
 end %class

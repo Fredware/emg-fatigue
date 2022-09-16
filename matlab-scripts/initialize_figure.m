@@ -1,4 +1,4 @@
-function [fig_handle, line_handles, t_max, t_min] = plotSetup1ch()
+function [fig_handle, line_handles, t_max, t_min] = initialize_figure(n_chans, n_feats)
     % PLOTSETUP1CH  sets up plots to visualize EMG input and the control
     % value calculated later in EMG_live. 
     % 
@@ -17,32 +17,33 @@ function [fig_handle, line_handles, t_max, t_min] = plotSetup1ch()
     % 
     % Tmax and Tmin are dynamically updated in updatePlot1ch.m
     
-    n_chans = 1; %number of input channels 
-    n_feats = 4; %number of features to display
     n_plots = n_chans + n_feats;
-    t_max = 15;
+    t_max = 5;
     t_min = 0;
 
     y_labels = cell( 1, n_plots);
-    axis_handles = cell( 1, n_plots);
+    axes_handles = cell( 1, n_plots);
     line_handles = cell( 1, n_plots);
     
     for i = 1:n_chans
-        y_labels{i} = strcat('v', num2str(i), ' (V)');
-        y_labels{i + n_chans} = strcat('c', num2str(i));
+        y_labels{i} = strcat('CH ', num2str(i), ' Amplitude [V]');
+    end
+    
+    for i = 1:n_feats
+        y_labels{n_chans + 1} = strcat('Feature ', num2str(i), ' Units [U]');
     end
     
     fig_handle = figure('units', 'normalized'); %open figure
     set( fig_handle, 'outerposition', [0, 0, 0.5, 1])%moveFigure to left half of screen
     
     for i = 1:n_plots
-        axis_handles{i} = subplot(n_plots, 1, i);
+        axes_handles{i} = subplot(n_plots, 1, i);
         line_handles{i} = animatedline;
         xlim([0 t_max])
         ylabel(y_labels{i})
         xticks([]);
         
     end
-    linkaxes([axis_handles{:}],'x')
-    xlabel('Time (seconds)')
+    linkaxes([axes_handles{:}],'x')
+    xlabel('Time [s]')
 end
