@@ -1,10 +1,9 @@
-function [data, features, data_idx, features_idx, prev_sample, prev_timestamp] = init1ch()
+function [data, features, data_idx, features_idx, prev_sample, prev_timestamp] = initialize_data_structures(buff_size, n_feats)
 % this function initializes all the variables needed to store the data
 % input from the Arduino, and to alter it to control the virtual hand. 
 % 
 % data is a vector of arbitrarily large size to store the incoming EMG data
-% from the arduino. initially set to the value NaN. The values within this 
-% vector will range between 0 and 5 for the one channel set up.
+% from the arduino. initially set to the value NaN.
 % 
 % control is a vector set to the same size as data. This will be where the
 % values of the what you want the control values to be based on the values
@@ -22,9 +21,9 @@ function [data, features, data_idx, features_idx, prev_sample, prev_timestamp] =
 % 
 % previousTimeStamp is used to limit the rate of control if a delay is
 % used. 
-BUFFER_SIZE = 1000000; %abritrarily large buffer for data
-data = NaN(1, BUFFER_SIZE);
-features = NaN(4, BUFFER_SIZE);
+
+data = NaN(1, buff_size);
+features = NaN(n_feats, buff_size);
 data_idx = 1;
 features_idx = 0;
 prev_sample = 1;

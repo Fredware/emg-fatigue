@@ -110,19 +110,23 @@ classdef SerialComm < handle
             % - multiply by 5 to match the signal recorded by the SpikerShield (0V-5V)
             % - subtract 2.5 V to make the signal zero-centered and undo the
             %   shift introduced by BYB  
-            EMG = obj.Data_Buffer/1024*5-2.5;
+            EMG = obj.Data_Buffer / 1024 * 5 - 2.5;
         end
         
-        function [EMG, varargout] = getRecentEMG( obj, varargin)
+        function [EMG] = getRecentEMG( obj, varargin)
             lastIdx = length( obj.Data_Buffer);
             startIdx = lastIdx - obj.Count;
             if startIdx < 1
                 startIdx = 1;
-            end  
-            EMG = obj.Data_Buffer( :, startIdx:end)/1024*5 - 2.5;
-            obj.Count = 0;
-            varargout{1} = obj.Status.CurrTime;
-            varargout{2} = length(EMG) / ( obj.Status.CurrTime - obj.Status.LastTime);
+            end
+            if startIdx == lastIdx
+                EMG = [];
+            else
+                EMG = obj.Data_Buffer( :, startIdx:end) / 1024 * 5 - 2.5;
+                obj.Count = 0;
+            end
+%             varargout{1} = obj.Status.CurrTime;
+%             varargout{2} = length(EMG) / ( obj.Status.CurrTime - obj.Status.LastTime);
         end
     end    
 end %class

@@ -13,7 +13,7 @@ try
         board = SerialComm(); %setup connection to arduino
     end
     connected = 1;
-    disp('Board connection: SUCCEEDED')
+    disp('Board connection: INITIATED')
 catch
     board = NaN;
     connected = 0;
