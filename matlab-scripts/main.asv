@@ -109,7 +109,6 @@ hold off
 
 legend(["sEMG", "Cue"])
 ylim([-1.1*scaling_factor 1.1*scaling_factor])
-grid on
 
 subplot(3,1,2)
 scaling_factor = max(full_table.RMS);
@@ -118,9 +117,8 @@ hold on
 plot(full_table.Time, scaling_factor*full_table.Cue, 'r--')
 hold off
 
-legend([full_table.Properties.VariableNames(2:3), "Cue"])
-ylim([-0.1*scaling_factor 1.1*scaling_factor])
-grid on
+% legend(legend(["MAV", "RMS", "Cue"]))
+ylim([-0.1 1.1*scaling_factor])
 
 subplot(3,1,3)
 scaling_factor = max(full_table.("Median Frequency"));
@@ -129,8 +127,7 @@ hold on
 plot(full_table.Time, scaling_factor*full_table.Cue, 'r--')
 hold off
 
-legend([full_table.Properties.VariableNames(5:6), "Cue"])
-ylim([-0.1*scaling_factor 1.1*scaling_factor])
+ylim([-0.1 1.1*scaling_factor])
 grid on
 
 %% close the arduino serial connection before closing MATLAB
