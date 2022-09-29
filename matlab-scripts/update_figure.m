@@ -1,10 +1,13 @@
-function [Tmax, Tmin] = updatePlot1ch(animatedLines, timeStamp, data, control, prevSamp, dataindex, controlindex, Tmax, Tmin)
+function [t_max, t_min] = update_figure(animatedLines, timestamp, data, features, prev_samp, data_idx, feature_idx, t_max, t_min)
 % [Tmax, Tmin] = updatePlot1ch(animatedLines, timeStamp, data, control, prevSamp, dataindex, controlindex, Tmax, Tmin)
+
 % updatePlot1ch updates the plots for the EMG data and control
 % animatedLines are handles for the animated lines returned from
 % plotSetup(1ch).m. 
+
 % timeStamp is the current time value and is used as the independent (x)
 % variable in the graphs
+
 % data is the whole data vector/matrix and is plotted with the max and min
 % values between the previous sample and the current dataindex. 
 % control is the whole control vector/matrix and is plotted at timeStamp
@@ -19,18 +22,18 @@ function [Tmax, Tmin] = updatePlot1ch(animatedLines, timeStamp, data, control, p
 % keep running continuously if desired.
 % Tmin is the lower xlimit of the graphs. updated similarly to Tmax as
 % timeStamp increases passed Tmax
-    for i=1:length(animatedLines)
-        if i<=1
-            addpoints(animatedLines{i},timeStamp,max(data(i,prevSamp:dataindex-1)));
-            addpoints(animatedLines{i},timeStamp,min(data(i,prevSamp:dataindex-1)));
+    for i = 1:length(animatedLines)
+        if i <= 1
+            addpoints(animatedLines{i}, timestamp, max( data(i, prev_samp:data_idx-1)));
+            addpoints(animatedLines{i}, timestamp, min( data(i, prev_samp:data_idx-1)));
         else
-            addpoints(animatedLines{i},timeStamp,control(i-1,controlindex));
+            addpoints(animatedLines{i}, timestamp, features(i-1, feature_idx));
         end
     end
-    if timeStamp>Tmax
-        Tmax=Tmax+5;
-        Tmin=Tmin+5;
-        xlim([Tmin Tmax])
+    if timestamp > t_max
+        t_max = t_max + 5;
+        t_min = t_min + 5;
+        xlim([t_min t_max])
     end
-    drawnow limitrate %update the plot, but limit update rate to 20 Hz
+    drawnow limitrate %update the plot, but limit update rate to 20 fps
 end
