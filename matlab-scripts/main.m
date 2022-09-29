@@ -13,8 +13,8 @@ clc;
 %% Plotting in real time
 % SET UP PLOT
 fs = 1000; % Hz
-INSTRUCTION_PERIOD = int16(2); %seconds
-RELAXATION_PERIOD = int16(1); %seconds
+INSTRUCTION_PERIOD = 1; %seconds
+RELAXATION_PERIOD = 0.5; %seconds
 
 n_chans = 1;
 n_feats = 5;
@@ -57,11 +57,12 @@ while( ishandle(fig))
             features( 1, features_idx) = mav_feat;
             features( 2, features_idx) = rms_feat;
 
-            if idivide(mod(timestamp, INSTRUCTION_PERIOD), RELAXATION_PERIOD) > 0
+            if mod(timestamp, INSTRUCTION_PERIOD)/ RELAXATION_PERIOD > 1
                 cue_state = 1;
             else
                 cue_state = 0;
             end
+           
             features( 3, features_idx) = cue_state;
             
             if cue_state > 0
