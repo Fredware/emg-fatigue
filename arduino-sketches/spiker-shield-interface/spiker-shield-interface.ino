@@ -7,7 +7,7 @@ char print_buff[5];    // allocate space for reading voltages
 
 void setup()
 {
-  Serial.begin( 9600); // this number is the Baudrate, and it must match the serial setup in MATLAB
+  Serial.begin( 256000); // this number is the Baudrate, and it must match the serial setup in MATLAB
   delay( 10);          // evoke a delay to let the serial setup
 }
 

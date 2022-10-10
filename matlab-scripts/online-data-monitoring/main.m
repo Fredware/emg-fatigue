@@ -13,8 +13,8 @@ clc;
 %% Plotting in real time
 % SET UP PLOT
 fs = 1000; % Hz
-INSTRUCTION_PERIOD = 1; %seconds
-RELAXATION_PERIOD = 0.5; %seconds
+INSTRUCTION_PERIOD = 2; %seconds
+RELAXATION_PERIOD = 1; %seconds
 
 n_chans = 1;
 n_feats = 5;
@@ -29,13 +29,17 @@ pause(0.5)
 
 tic
 
+loopTimes = NaN(10000000,1);
+timeindex = 1;
 % Run until time is out or figure closes
 while( ishandle(fig))
     % SAMPLE ARDUINO
+    tic
+    pause(0.0111111)
     try
         emg = uno.getRecentEMG; % value range: [-2.5:2.5]; length range: [1:buffer length]
         if isempty(emg)
-            pause(0.0111111)
+            
         else
             [~, new_samples] = size(emg); % how many samples were received
             data( :, data_idx:data_idx + new_samples - 1) = emg(1,:); % adds new EMG data to the data vector
@@ -87,6 +91,8 @@ while( ishandle(fig))
         prev_timestamp = timestamp;
         prev_sample = data_idx;
     end
+    loopTimes(timeindex) = toc;
+    timeindex = timeindex + 1;
 end
 %% Plot the data and control values from the most recent time running the system
 % finalPlot(data, features, t_data, t_features)

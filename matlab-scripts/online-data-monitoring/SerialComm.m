@@ -36,7 +36,7 @@ classdef SerialComm < handle
                 n_chans = 1;
             end
 
-            n_samples = 500;
+            n_samples = 50000;
             
             obj.Data_Buffer = zeros(n_chans, n_samples);
             
@@ -74,7 +74,7 @@ classdef SerialComm < handle
                 end
             end
             delete(instrfind('port',obj.COM_ID));
-            obj.ARD = serialport(obj.COM_ID,9600,'Timeout',1); %9600
+            obj.ARD = serialport(obj.COM_ID,256000,'Timeout',1); %9600
             configureCallback(obj.ARD,"terminator",@obj.read);
             flush(obj.ARD);
             pause(0.1);
