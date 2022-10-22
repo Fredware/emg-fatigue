@@ -50,8 +50,8 @@ function [fig_handle, line_handles, t_max, t_min] = initialize_figure(n_chans, n
     xlabel('Time [s]')
 
     ylim(axes_handles{1}, [-2.5 2.5])
-    ylim(axes_handles{2}, [-0.1 2.5])
-    ylim(axes_handles{3}, [-0.1 2.5])
+    ylim(axes_handles{2}, [-0.1 2.0])
+    ylim(axes_handles{3}, [-0.1 2.0])
     ylim(axes_handles{4}, [-0.1, 1.1])
     ylim(axes_handles{5}, [0 300])
     ylim(axes_handles{6}, [0 300])

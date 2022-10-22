@@ -13,8 +13,8 @@ clc;
 %% Plotting in real time
 % SET UP PLOT
 fs = 1000; % Hz
-INSTRUCTION_PERIOD = 2; %seconds
-RELAXATION_PERIOD = 1; %seconds
+INSTRUCTION_PERIOD = 4; %seconds
+RELAXATION_PERIOD = 2; %seconds
 
 n_chans = 1;
 n_feats = 5;
