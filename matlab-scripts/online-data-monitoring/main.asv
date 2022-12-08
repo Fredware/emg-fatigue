@@ -1,3 +1,7 @@
+% EMG Feature Visulizer
+% Author: Fredi Mino
+% Date: 08-25-2022
+% Latest Version: https://github.com/Fredware/emg-fatigue.git
 %% Reset workspace
 try
     uno.close;
@@ -8,65 +12,66 @@ clc;
 
 %% Establish connection with Arduino
 % Pass COM port number as argument to bypass automatic connection.
-[uno, uno_connected] = connect_board();
+[uno, ~] = connect_board();
 
 %% Plotting in real time
-% SET UP PLOT
 fs = 1000; % Hz
-INSTRUCTION_PERIOD = 1; %seconds
-RELAXATION_PERIOD = 0.5; %seconds
 
-n_chans = 1;
-n_feats = 5;
-
+% figure parameters
+n_chans = 1; % emg signals
+n_feats = 5; % non-emg signals
 [fig, animated_lines, t_max, t_min] = initialize_figure(n_chans, n_feats);
 
-% INITIALIZATION
-[data, features, data_idx, features_idx, prev_sample, prev_timestamp] = initialize_data_structures(60e3, n_feats);
+% data storage parameters
+data_buff_len = 60*fs; % seconds * fs
+[data, features, data_idx, features_idx, prev_sample, prev_timestamp] = initialize_data_structures(data_buff_len, n_feats);
 t_data = [0];
 t_features = [];
-pause(0.5)
 
-tic
+% task configuration parameters
+task_period = 4; %seconds
+idle_period = 2; %seconds
 
-% Run until time is out or figure closes
+% 
+mav_win_len = 300; %samples
+mdf_win_len = 500; %samples
+largest_win_len = max([mav_win_len, mdf_win_len]); 
+
+% Run until figure closes
 while( ishandle(fig))
-    % SAMPLE ARDUINO
+    pause(0.0111111) % pause to avoid callback overload
     try
         emg = uno.getRecentEMG; % value range: [-2.5:2.5]; length range: [1:buffer length]
-        if isempty(emg)
-            pause(0.0111111)
-        else
-            [~, new_samples] = size(emg); % how many samples were received
-            data( :, data_idx:data_idx + new_samples - 1) = emg(1,:); % adds new EMG data to the data vector
-            data_idx = data_idx + new_samples; %update sample count
+        if ~isempty(emg)
+            [~, new_samples] = size(emg); % count new samples
+            data( :, data_idx:data_idx + new_samples - 1) = emg(1,:); % adds new samples to the data vector
+            data_idx = data_idx + new_samples; % update index for inserting future samples
             features_idx = features_idx + 1;
         end
     catch
-        disp("Data acquisition: FAILED")
+        disp("Data Acquisition: FAILED")
     end
-
-    if ~isempty(emg) && data_idx > 500
-        % UPDATE timestamp
-%         timestamp = toc;
-        timestamp = (data_idx - 1) / fs;
-        % CALCULATE FEATURES
+    
+    % Ensure buffer has enough data to compute features
+    if ~isempty(emg) && data_idx > largest_win_len
+        timestamp = (data_idx - 1) / fs; % time in seconds for the plot
         try
-            [mav_feat, rms_feat] = compute_amplitude_feats(data(:, data_idx-300: data_idx-1));
-
+            % compute time-domain features
+            [mav_feat, rms_feat] = compute_amplitude_feats(data(:, data_idx-mav_win_len: data_idx-1));
             features( 1, features_idx) = mav_feat;
             features( 2, features_idx) = rms_feat;
 
-            if mod(timestamp, INSTRUCTION_PERIOD)/ RELAXATION_PERIOD > 1
-                cue_state = 1;
+            % update task indicator
+            if mod(timestamp, task_period)/ idle_period > 1
+                task_indicator = 1;
             else
-                cue_state = 0;
+                task_indicator = 0;
             end
-           
-            features( 3, features_idx) = cue_state;
+            features( 3, features_idx) = task_indicator;
             
-            if cue_state > 0
-                signal = data(:, data_idx-500: data_idx-1);
+            % compute frequency-domain features only while performing task 
+            if task_indicator > 0
+                signal = data(:, data_idx-mdf_win_len: data_idx-1);
                 features( 4, features_idx) = meanfreq( signal, fs);
                 features( 5, features_idx) = medfreq( signal, fs);
             else
@@ -74,22 +79,21 @@ while( ishandle(fig))
                 features( 5, features_idx) = 0;
             end
         catch
-            disp('Something broke in your code!')
+            disp("Feature Extraction: FAILED")
         end
 
+        % synchronize calculated features with last sample
         t_features(features_idx) = timestamp;
-%         tempStart = t_data(end);
-%         t_data( prev_sample:data_idx-1) = linspace( tempStart, timestamp, new_samples);
         
-        % UPDATE PLOT
+        % append datapoints to the plot
         [t_max, t_min] = update_figure(animated_lines, timestamp, data, features, prev_sample, data_idx, features_idx, t_max, t_min);
 
+        % update book-keeping variables
         prev_timestamp = timestamp;
         prev_sample = data_idx;
     end
 end
 %% Plot the data and control values from the most recent time running the system
-% finalPlot(data, features, t_data, t_features)
 data_table = timetable(data(:,1:data_idx-1)', 'SampleRate', fs);
 data_table =  renamevars(data_table, "Var1", "sEMG");
 
