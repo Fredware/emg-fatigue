@@ -2,7 +2,6 @@
 % Author: Fredi Mino
 % Date: 08-25-2022
 % Latest Version: https://github.com/Fredware/emg-fatigue.git
-
 %% Reset workspace
 try
     uno.close;
@@ -15,7 +14,7 @@ clc;
 % Pass COM port number as argument to bypass automatic connection.
 [uno, ~] = connect_board();
 
-%% Workspace setup
+%% Plotting in real time
 fs = 1000; % Hz
 
 % figure parameters
@@ -33,12 +32,11 @@ t_features = [];
 task_period = 4; %seconds
 idle_period = 2; %seconds
 
-% feature calculation parameters
+% 
 mav_win_len = 300; %samples
 mdf_win_len = 500; %samples
 largest_win_len = max([mav_win_len, mdf_win_len]); 
 
-%% Real-time plotting
 % Run until figure closes
 while( ishandle(fig))
     pause(0.0111111) % pause to avoid callback overload
@@ -56,7 +54,7 @@ while( ishandle(fig))
     
     % Ensure buffer has enough data to compute features
     if ~isempty(emg) && data_idx > largest_win_len
-        timestamp = (data_idx - 1) / fs; % compute time in seconds for the plot
+        timestamp = (data_idx - 1) / fs; % time in seconds for the plot
         try
             % compute time-domain features
             [mav_feat, rms_feat] = compute_amplitude_feats(data(:, data_idx-mav_win_len: data_idx-1));
@@ -84,7 +82,7 @@ while( ishandle(fig))
             disp("Feature Extraction: FAILED")
         end
 
-        % synchronize calculated features with the most recent sample
+        % synchronize calculated features with last sample
         t_features(features_idx) = timestamp;
         
         % append datapoints to the plot
@@ -95,7 +93,6 @@ while( ishandle(fig))
         prev_sample = data_idx;
     end
 end
-
 %% Plot the data and control values from the most recent time running the system
 data_table = timetable(data(:,1:data_idx-1)', 'SampleRate', fs);
 data_table =  renamevars(data_table, "Var1", "sEMG");
@@ -141,9 +138,8 @@ legend([full_table.Properties.VariableNames(5:6), "Cue"])
 ylim([-0.1*scaling_factor 1.1*scaling_factor])
 grid on
 
-%% Terminate serial connection before closing MATLAB
+%% close the arduino serial connection before closing MATLAB
 uno.close;
-disp('Board Connection: TERMINATED')
-
-%% Save data to file for offline analysis
+disp('Board connection: TERMINATED')
+%% save data to file
 raw_data = data(1:data_idx-1);
